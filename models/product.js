@@ -17,12 +17,4 @@ const Product = sequelize.define('Product', {
     timestamps: false
 });
 
-Product.findBySearch = async function(search) {
-    return await Product.findAll({
-        where: {
-            name: { [sequelize.Sequelize.or.like]: `%${search}%` }
-        }
-    });
-};
-
 export default Product;

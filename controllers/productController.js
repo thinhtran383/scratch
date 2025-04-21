@@ -18,7 +18,7 @@ export const index = async (req, res) => {
         where = { [Op.or]: orClauses };
     }
 
-    const products = await Product.findAll({ where });
+    const products = await Product.findAll({ where,  order: [['code', 'DESC']] });
 
     if (req.xhr) {
         return res.render('product/_productTable', { products });
