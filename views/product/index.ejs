@@ -1,115 +1,141 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="vi">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Product List</title>
+    <title>Danh Sách Sản Phẩm</title>
     <!-- Bootstrap CSS + Icons -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .btn-primary-tw {
+                @apply bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg transition duration-200;
+            }
+            .btn-secondary-tw {
+                @apply bg-gray-500 hover:bg-gray-600 text-white font-medium py-2 px-4 rounded-lg transition duration-200;
+            }
+            .btn-danger-tw {
+                @apply bg-red-600 hover:bg-red-700 text-white font-medium py-2 px-4 rounded-lg transition duration-200;
+            }
+            .btn-warning-tw {
+                @apply bg-yellow-500 hover:bg-yellow-600 text-white font-medium py-2 px-4 rounded-lg transition duration-200;
+            }
+        }
+    </style>
 </head>
-<body>
-<div class="container py-5">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h1 class="h3">Product List</h1>
-        <a href="#" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addProductModal">
-            <i class="bi bi-plus-lg"></i> Add New Product
+<body class="bg-gray-50">
+<div class="container mx-auto py-8 px-4 sm:px-6 lg:px-8 max-w-7xl">
+    <div class="flex flex-col sm:flex-row justify-between items-center mb-6 gap-4">
+        <h1 class="text-3xl font-bold text-gray-800 mb-2 sm:mb-0">Danh Sách Sản Phẩm</h1>
+        <a href="#" class="btn-primary-tw flex items-center gap-2 shadow-md" data-bs-toggle="modal" data-bs-target="#addProductModal">
+            <i class="bi bi-plus-lg"></i> Thêm Sản Phẩm
         </a>
     </div>
 
     <!-- Search Form -->
-    <form class="d-flex mb-4" method="GET" action="/products">
-        <input
-                class="form-control me-2"
-                type="search"
-                name="search"
-                placeholder="Search by name, code, category or quantity..."
-                value="<%= search %>"
-        >
-        <button class="btn btn-outline-success" type="submit">
-            <i class="bi bi-search"></i> Search
-        </button>
-    </form>
+    <div class="bg-white p-4 rounded-lg shadow-md mb-6">
+        <form class="flex flex-col sm:flex-row gap-3" method="GET" action="/products">
+            <input
+                    class="flex-grow form-control form-control-sm border border-gray-300 rounded-lg px-3 py-1 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200"
+                    type="search"
+                    name="search"
+                    placeholder="Tìm kiếm theo tên, mã, danh mục hoặc số lượng..."
+                    value="<%= search %>"
+            >
+            <button class="btn btn-sm btn-outline-success hover:bg-green-600 hover:text-white transition duration-200 shadow-sm" type="submit">
+                <i class="bi bi-search mr-1"></i> Tìm Kiếm
+            </button>
+        </form>
+    </div>
 
-    <table class="table table-striped table-hover align-middle">
-        <thead class="table-dark">
-        <tr>
-            <th>#</th>
-            <th>Name</th>
-            <th>Code</th>
-            <th>Quantity</th>
-            <th>Category</th>
-            <th>Price ($)</th>
-            <th class="text-center">Actions</th>
-        </tr>
-        </thead>
-        <tbody>
-        <% products.forEach((product, idx) => { %>
+    <div class="bg-white rounded-lg shadow-md overflow-hidden">
+        <table class="table table-hover align-middle w-full mb-0">
+            <thead class="bg-gray-800 text-white">
             <tr>
-                <th scope="row"><%= idx + 1 %></th>
-                <td><%= product.name %></td>
-                <td><%= product.code %></td>
-                <td><%= product.quantity %></td>
-                <td><%= product.category %></td>
-                <td><%= parseFloat(product.price).toFixed(2) %></td>
-                <td class="text-center">
-                    <button type="button"
-                            class="btn btn-sm btn-warning btn-edit"
-                            data-id="<%= product.id %>"
-                            data-name="<%= product.name %>"
-                            data-code="<%= product.code %>"
-                            data-quantity="<%= product.quantity %>"
-                            data-category="<%= product.category %>"
-                            data-price="<%= product.price %>">
-                        <i class="bi bi-pencil-square"></i> Edit
-                    </button>
-                    <button type="button"
-                            class="btn btn-sm btn-danger btn-delete"
-                            data-id="<%= product.id %>"
-                            data-name="<%= product.name %>">
-                        <i class="bi bi-trash"></i> Delete
-                    </button>
-                </td>
+                <th class="py-3 px-4 font-semibold">#</th>
+                <th class="py-3 px-4 font-semibold">Mã sản phẩm</th>
+                <th class="py-3 px-4 font-semibold">Tên sản phẩm</th>
+                <th class="py-3 px-4 font-semibold">Số lượng</th>
+                <th class="py-3 px-4 font-semibold">Danh mục</th>
+                <th class="py-3 px-4 font-semibold">Giá (₫)</th>
+                <th class="py-3 px-4 font-semibold text-center">Thao tác</th>
             </tr>
-        <% }) %>
-        </tbody>
-    </table>
+            </thead>
+            <tbody class="divide-y divide-gray-200">
+            <% products.forEach((product, idx) => { %>
+                <tr class="hover:bg-gray-50 transition duration-150">
+                    <th scope="row" class="py-3 px-4 font-medium"><%= idx + 1 %></th>
+                    <td class="py-3 px-4 font-medium text-gray-600"><%= product.code %></td>
+                    <td class="py-3 px-4"><%= product.name %></td>
+                    <td class="py-3 px-4"><%= product.quantity %></td>
+                    <td class="py-3 px-4"><span class="px-2 py-1 bg-blue-100 text-blue-800 rounded-full text-xs font-medium"><%= product.category %></span></td>
+                    <td class="py-3 px-4 font-medium"><%= parseFloat(product.price).toFixed(2) %></td>
+                    <td class="py-3 px-4 text-center">
+                        <div class="flex justify-center gap-2">
+                            <button type="button"
+                                    class="btn-warning-tw text-sm py-1.5 px-3 flex items-center gap-1 btn-edit"
+                                    data-id="<%= product.id %>"
+                                    data-name="<%= product.name %>"
+                                    data-code="<%= product.code %>"
+                                    data-quantity="<%= product.quantity %>"
+                                    data-category="<%= product.category %>"
+                                    data-price="<%= product.price %>">
+                                <i class="bi bi-pencil-square"></i> Sửa
+                            </button>
+                            <button type="button"
+                                    class="btn-danger-tw text-sm py-1.5 px-3 flex items-center gap-1 btn-delete"
+                                    data-id="<%= product.id %>"
+                                    data-name="<%= product.name %>">
+                                <i class="bi bi-trash"></i> Xóa
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            <% }) %>
+            </tbody>
+        </table>
+    </div>
 </div>
 
 <!-- Modal Edit Product -->
 <div class="modal fade" id="editProductModal" tabindex="-1" aria-labelledby="editProductModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="editProductModalLabel">Edit Product</h5>
+        <div class="modal-content border-0 shadow-lg rounded-lg overflow-hidden">
+            <div class="modal-header bg-gray-50 border-b border-gray-200">
+                <h5 class="modal-title text-gray-800 font-bold" id="editProductModalLabel">Sửa Sản Phẩm</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <form id="editProductForm">
-                <div class="modal-body">
-                    <div class="mb-3">
-                        <label for="editName" class="form-label">Product Name</label>
-                        <input type="text" class="form-control" id="editName" required>
+                <div class="modal-body p-4">
+                    <div class="mb-4">
+                        <label for="editCode" class="block text-sm font-medium text-gray-700 mb-1">Mã sản phẩm</label>
+                        <input type="text" class="form-control bg-gray-100 border border-gray-300 rounded-lg" id="editCode" disabled>
                     </div>
-                    <div class="mb-3">
-                        <label for="editCode" class="form-label">Product Code</label>
-                        <input type="text" class="form-control" id="editCode" disabled>
+
+                    <div class="mb-4">
+                        <label for="editName" class="block text-sm font-medium text-gray-700 mb-1">Tên sản phẩm</label>
+                        <input type="text" class="form-control border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200" id="editName" required>
                     </div>
-                    <div class="mb-3">
-                        <label for="editQuantity" class="form-label">Quantity</label>
-                        <input type="number" class="form-control" id="editQuantity" required>
+
+                    <div class="mb-4">
+                        <label for="editQuantity" class="block text-sm font-medium text-gray-700 mb-1">Số lượng</label>
+                        <input type="number" class="form-control border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200" id="editQuantity" required>
                     </div>
-                    <div class="mb-3">
-                        <label for="editCategory" class="form-label">Category</label>
-                        <input type="text" class="form-control" id="editCategory" required>
+                    <div class="mb-4">
+                        <label for="editCategory" class="block text-sm font-medium text-gray-700 mb-1">Danh mục</label>
+                        <input type="text" class="form-control border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200" id="editCategory" required>
                     </div>
-                    <div class="mb-3">
-                        <label for="editPrice" class="form-label">Price ($)</label>
-                        <input type="number" class="form-control" id="editPrice" step="0.01" required>
+                    <div class="mb-4">
+                        <label for="editPrice" class="block text-sm font-medium text-gray-700 mb-1">Giá (₫)</label>
+                        <input type="number" class="form-control border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200" id="editPrice" step="0.01" required>
                     </div>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                <div class="modal-footer bg-gray-50 border-t border-gray-200">
+                    <button type="button" class="btn-secondary-tw" data-bs-dismiss="modal">Hủy</button>
+                    <button type="submit" class="btn-primary-tw">Lưu Thay Đổi</button>
                 </div>
             </form>
         </div>
@@ -119,37 +145,37 @@
 <!-- Modal Add New Product -->
 <div class="modal fade" id="addProductModal" tabindex="-1" aria-labelledby="addProductModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="addProductModalLabel">Add New Product</h5>
+        <div class="modal-content border-0 shadow-lg rounded-lg overflow-hidden">
+            <div class="modal-header bg-gray-50 border-b border-gray-200">
+                <h5 class="modal-title text-gray-800 font-bold" id="addProductModalLabel">Thêm Sản Phẩm Mới</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <form id="addProductForm">
-                <div class="modal-body">
-                    <div class="mb-3">
-                        <label for="addName" class="form-label">Product Name</label>
-                        <input type="text" class="form-control" id="addName" required>
+                <div class="modal-body p-4">
+                    <div class="mb-4">
+                        <label for="addCode" class="block text-sm font-medium text-gray-700 mb-1">Mã sản phẩm</label>
+                        <input type="text" class="form-control border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200" id="addCode" required>
                     </div>
-                    <div class="mb-3">
-                        <label for="addCode" class="form-label">Product Code</label>
-                        <input type="text" class="form-control" id="addCode" required>
+                    <div class="mb-4">
+                        <label for="addName" class="block text-sm font-medium text-gray-700 mb-1">Tên sản phẩm</label>
+                        <input type="text" class="form-control border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200" id="addName" required>
                     </div>
-                    <div class="mb-3">
-                        <label for="addQuantity" class="form-label">Quantity</label>
-                        <input type="number" class="form-control" id="addQuantity" required>
+                    <div class="mb-4">
+                        <label for="addQuantity" class="block text-sm font-medium text-gray-700 mb-1">Số lượng</label>
+                        <input type="number" class="form-control border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200" id="addQuantity" required>
                     </div>
-                    <div class="mb-3">
-                        <label for="addCategory" class="form-label">Category</label>
-                        <input type="text" class="form-control" id="addCategory" required>
+                    <div class="mb-4">
+                        <label for="addCategory" class="block text-sm font-medium text-gray-700 mb-1">Danh mục</label>
+                        <input type="text" class="form-control border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200" id="addCategory" required>
                     </div>
-                    <div class="mb-3">
-                        <label for="addPrice" class="form-label">Price ($)</label>
-                        <input type="number" class="form-control" id="addPrice" step="0.01" required>
+                    <div class="mb-4">
+                        <label for="addPrice" class="block text-sm font-medium text-gray-700 mb-1">Giá (₫)</label>
+                        <input type="number" class="form-control border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200" id="addPrice" step="0.01" required>
                     </div>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="submit" class="btn btn-primary">Add Product</button>
+                <div class="modal-footer bg-gray-50 border-t border-gray-200">
+                    <button type="button" class="btn-secondary-tw" data-bs-dismiss="modal">Hủy</button>
+                    <button type="submit" class="btn-primary-tw">Thêm Sản Phẩm</button>
                 </div>
             </form>
         </div>
@@ -159,25 +185,85 @@
 <!-- Modal Delete Product -->
 <div class="modal fade" id="confirmDeleteModal" tabindex="-1" aria-labelledby="confirmDeleteLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="confirmDeleteLabel">Confirm Delete</h5>
+        <div class="modal-content border-0 shadow-lg rounded-lg overflow-hidden">
+            <div class="modal-header bg-gray-50 border-b border-gray-200">
+                <h5 class="modal-title text-gray-800 font-bold" id="confirmDeleteLabel">Xác Nhận Xóa</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div class="modal-body">
-                Are you sure you want to delete <strong id="modalProductName"></strong>?
+            <div class="modal-body p-4 text-gray-700">
+                <div class="flex items-center gap-3">
+                    <div class="flex-shrink-0 w-12 h-12 rounded-full bg-red-100 flex items-center justify-center">
+                        <i class="bi bi-exclamation-triangle text-red-500 text-xl"></i>
+                    </div>
+                    <p class="text-lg">
+                        Bạn có chắc chắn muốn xóa <strong id="modalProductName" class="font-semibold"></strong>?
+                    </p>
+                </div>
+                <p class="mt-3 text-sm text-gray-500">Hành động này không thể hoàn tác.</p>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                <button type="button" id="confirmDeleteBtn" class="btn btn-danger">Delete</button>
+            <div class="modal-footer bg-gray-50 border-t border-gray-200">
+                <button type="button" class="btn-secondary-tw" data-bs-dismiss="modal">Hủy</button>
+                <button type="button" id="confirmDeleteBtn" class="btn-danger-tw">Xóa</button>
             </div>
         </div>
     </div>
 </div>
 
+<!-- Custom Toast Notification -->
+<div class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
+    <div id="customToast" class="toast hide" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="toast-header">
+            <strong class="me-auto" id="toastTitle">Notification</strong>
+            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+        <div class="toast-body" id="toastMessage"></div>
+    </div>
+</div>
+
 <!-- Bootstrap JS Bundle -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- Custom Toast Function -->
+<script>
+    function showToast(message, type = 'info') {
+        const toast = document.getElementById('customToast');
+        const toastTitle = document.getElementById('toastTitle');
+        const toastMessage = document.getElementById('toastMessage');
+        const bsToast = new bootstrap.Toast(toast);
+
+        // Set message
+        toastMessage.textContent = message;
+
+        // Remove previous classes
+        toast.classList.remove('bg-success', 'bg-danger', 'bg-warning', 'bg-info', 'text-white');
+        toastTitle.classList.remove('text-white');
+
+        // Set type
+        switch(type) {
+            case 'success':
+                toast.classList.add('bg-success', 'text-white');
+                toastTitle.textContent = 'Thành công';
+                toastTitle.classList.add('text-white');
+                break;
+            case 'error':
+                toast.classList.add('bg-danger', 'text-white');
+                toastTitle.textContent = 'Lỗi';
+                toastTitle.classList.add('text-white');
+                break;
+            case 'warning':
+                toast.classList.add('bg-warning');
+                toastTitle.textContent = 'Cảnh báo';
+                break;
+            default:
+                toast.classList.add('bg-info', 'text-white');
+                toastTitle.textContent = 'Thông báo';
+                toastTitle.classList.add('text-white');
+        }
+
+        // Show toast
+        bsToast.show();
+    }
+</script>
 <script>
     document.addEventListener('DOMContentLoaded', () => {
         const editModalEl = document.getElementById('editProductModal');
@@ -205,11 +291,11 @@
                     event.preventDefault();
 
                     if (!isValidNumber(editQuantity.value)) {
-                        alert('Quantity must be a valid positive integer!');
+                        showToast('Số lượng phải là số nguyên dương hợp lệ!', 'warning');
                         return;
                     }
                     if (!isValidPrice(editPrice.value)) {
-                        alert('Price must be a valid positive number!');
+                        showToast('Giá phải là số dương hợp lệ!', 'warning');
                         return;
                     }
 
@@ -229,10 +315,13 @@
                     })
                         .then(response => response.json())
                         .then(() => {
-                            alert('Product updated successfully!');
-                            location.reload();
+                            showToast('Cập nhật sản phẩm thành công!', 'success');
+                            setTimeout(() => location.reload(), 1500);
                         })
-                        .catch(err => console.error('Error updating product:', err));
+                        .catch(err => {
+                            console.error('Lỗi cập nhật sản phẩm:', err);
+                            showToast('Lỗi cập nhật sản phẩm!', 'error');
+                        });
 
                     editModal.hide();
                 };
@@ -275,11 +364,11 @@
             event.preventDefault();
 
             if (!isValidNumber(addQuantity.value)) {
-                alert('Quantity must be a valid positive integer!');
+                showToast('Số lượng phải là số nguyên dương hợp lệ!', 'warning');
                 return;
             }
             if (!isValidPrice(addPrice.value)) {
-                alert('Price must be a valid positive number!');
+                showToast('Giá phải là số dương hợp lệ!', 'warning');
                 return;
             }
 
@@ -287,7 +376,7 @@
             // check existing product code offline not call api
             const existingProductCodes = [...document.querySelectorAll('tbody tr td:nth-child(3)')].map(td => td.textContent);
             if (existingProductCodes.includes(addCode.value)) {
-                alert('Product code already exists!');
+                showToast('Mã sản phẩm đã tồn tại!', 'error');
                 return;
             }
 
@@ -306,10 +395,13 @@
             })
                 .then(response => response.json())
                 .then(() => {
-                    alert('Product added successfully!');
-                    location.reload();
+                    showToast('Thêm sản phẩm thành công!', 'success');
+                    setTimeout(() => location.reload(), 1500);
                 })
-                .catch(err => console.error('Error adding product:', err));
+                .catch(err => {
+                    console.error('Lỗi thêm sản phẩm:', err);
+                    showToast('Lỗi thêm sản phẩm!', 'error');
+                });
 
             addModal.hide();
         };
